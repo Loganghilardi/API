@@ -7,9 +7,11 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
+#[ORM\HasLifecycleCallbacks]
 #[ApiResource]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -25,10 +27,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $roles = [];
 
     #[ORM\Column(type: 'string')]
+    private $firstName;
+
+    #[ORM\Column(type: 'string')]
+    private $lastName;
+
+    #[ORM\Column(type: 'integer')]
+    private $dailyConsumption;
+
+    #[ORM\Column(type: 'integer')]
+    private $cigarettesPerPack;
+
+    #[ORM\Column(type: 'float')]
+    private $packPrice;
+
+    #[ORM\Column(type: 'string')]
     private $password;
 
     #[SerializedName("password")]
     private $plainPassword;
+
+    #[ORM\Column(type: 'datetime')]
+    private $creationDate;
+
+    #[ORM\PrePersist]
+    public function onPrePersist() :void
+    {
+        $this->creationDate = new \DateTime();
+    }
 
     public function getId(): ?int
     {
@@ -76,6 +102,69 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): self
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): self
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getDailyConsumption(): ?int
+    {
+        return $this->dailyConsumption;
+    }
+
+    public function setDailyConsumption(int $dailyConsumption): self
+    {
+        $this->dailyConsumption = $dailyConsumption;
+
+        return $this;
+    }
+
+
+    public function getCigarettesPerPack(): ?int
+    {
+        return $this->cigarettesPerPack;
+    }
+
+    public function setCigarettesPerPack(int $cigarettesPerPack): self
+    {
+        $this->cigarettesPerPack = $cigarettesPerPack;
+
+        return $this;
+    }
+
+    public function getPackPrice(): ?float
+    {
+        return $this->packPrice;
+    }
+
+    public function setPackPrice(float $packPrice): self
+    {
+        $this->packPrice = $packPrice;
+
+        return $this;
+    }
+
     /**
      * @see PasswordAuthenticatedUserInterface
      */
@@ -113,5 +202,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
          $this->plainPassword = null;
+    }
+
+    public function getCreationDate(): \DateTimeInterface
+    {
+        return $this->creationDate;
+    }
+
+    public function setCreationDate(\DateTimeInterface $creationDate): self
+    {
+        $this->creationDate = $creationDate;
+
+        return $this;
     }
 }
