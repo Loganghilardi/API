@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -13,6 +15,7 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 #[ORM\Table(name: '`user`')]
 #[ORM\HasLifecycleCallbacks]
 #[ApiResource]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'email' => 'exact'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]

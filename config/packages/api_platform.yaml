@@ -1,6 +1,6 @@
 api_platform:
-    title: 'Project REST API'
-    description: 'A Symfony API to manage my project.'
+    title: 'OuiQuit REST API'
+    description: 'A Symfony API to manage OuiQuit.'
     version: '1.0.0'
     mapping:
         paths: ['%kernel.project_dir%/src/Entity']
