@@ -51,12 +51,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $plainPassword;
 
     #[ORM\Column(type: 'datetime')]
+    private $lastTime;
+
+    #[ORM\Column(type: 'datetime')]
     private $creationDate;
 
     #[ORM\PrePersist]
     public function onPrePersist() :void
     {
         $this->creationDate = new \DateTime();
+        $this->lastTime = new \DateTime();
+
     }
 
     public function getId(): ?int
@@ -205,6 +210,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
          $this->plainPassword = null;
+    }
+
+    public function getLastTime(): \DateTimeInterface
+    {
+        return $this->lastTime;
+    }
+
+    public function setLastTime(\DateTimeInterface $lastTime): self
+    {
+        $this->lastTime = $lastTime;
+
+        return $this;
     }
 
     public function getCreationDate(): \DateTimeInterface
